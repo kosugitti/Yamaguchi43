@@ -100,3 +100,6 @@ table(dat.tb$team, dat.tb$League)
 dat.tb <- dat.tb %>%
   mutate(Year_num = Year %>% str_remove("年度") %>% as.numeric())
 dat.tb %>% select(Year, Year_num) %>% head()
+
+#629
+dat.tb %>% filter(position2 == "野手") %>% head()
