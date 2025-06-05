@@ -278,3 +278,53 @@ dat.tb %>% group_by(Year_num) %>%
   summarise(total_HR = sum(HR, na.rm = TRUE)) %>%
   ggplot(aes(x = factor(Year_num), y = total_HR, fill = factor(Year_num))) +
   geom_col()
+
+#6216
+dat.tb %>% group_by(Year_num) %>%
+  summarise(total_HR = sum(HR, na.rm = TRUE)) %>%
+  ggplot(aes(x = factor(Year_num), y = total_HR, fill = factor(Year_num))) +
+  geom_col() + theme(legend.position = "none")
+dat.tb %>% group_by(Year_num) %>%
+  summarise(total_HR = sum(HR, na.rm = TRUE)) %>%
+  ggplot(aes(x = factor(Year_num), y = total_HR, fill = factor(Year_num))) +
+  geom_col() + scale_fill_brewer(palette = "Set1") +
+  theme(legend.position = "none")
+RColorBrewer::display.brewer.all() 
+dat.tb %>% group_by(Year_num) %>%
+  summarise(total_HR = sum(HR, na.rm = TRUE)) %>%
+  ggplot(aes(x = factor(Year_num), y = total_HR, fill = factor(Year_num))) +
+  geom_col() + scale_fill_grey() +
+  theme(legend.position = "none") 
+dat.tb %>% group_by(Year_num) %>%
+  summarise(total_HR = sum(HR, na.rm = TRUE)) %>%
+  ggplot(aes(x = factor(Year_num), y = total_HR, fill = factor(Year_num))) +
+  geom_col() + scale_fill_brewer(palette = "Blues") +
+  theme_bw() + theme(legend.position = "none") 
+library(dplyr)
+library(ggplot2)
+library(RColorBrewer)
+
+# 年数の数に合わせて Blues パレットを補間する
+n_years <- length(unique(dat.tb$Year_num))
+blues_colors <- colorRampPalette(brewer.pal(9, "Blues"))(n_years)
+
+# グラフ作成
+g <- dat.tb %>% 
+  group_by(Year_num) %>%
+  summarise(total_HR = sum(HR, na.rm = TRUE)) %>%
+  ggplot(aes(x = factor(Year_num), y = total_HR, fill = factor(Year_num))) +
+  geom_col() +
+  scale_fill_manual(values = blues_colors) +   # 補間したブルー系カラーを手動で指定
+  theme_bw() +
+  theme(legend.position = "none") +
+  labs(title = "年度別HR総数", x = "年度", y = "総HR数")
+
+# グラフ表示
+print(g) 
+
+#Year_num に10年分など 9個を超えるカテゴリ があり、グラフが分かりにくくなるためブルーカラーをたした
+
+ggsave("yearly_hr.png", plot = g, width = 8, height = 6, dpi = 300)
+getwd()
+
+#6217
