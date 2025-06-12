@@ -328,3 +328,45 @@ ggsave("yearly_hr.png", plot = g, width = 8, height = 6, dpi = 300)
 getwd()
 
 #6217
+dat.tb %>% group_by(Year_num) %>%
+  summarise(total_HR = sum(HR, na.rm = TRUE)) %>%
+  ggplot(aes(x = Year_num, y = total_HR)) +
+  geom_line() + geom_point() +
+  labs(title = "年間HR総数の推移", x = "年度", y = "総HR数")
+
+dat.tb %>% group_by(Year_num, team) %>%
+  summarise(total_HR = sum(HR, na.rm = TRUE), .groups = "drop") %>%
+  ggplot(aes(x = Year_num, y = total_HR, color = team)) +
+  geom_line() + geom_point() 
+
+dat.tb %>% group_by(Year_num, team) %>%
+  summarise(total_HR = sum(HR, na.rm = TRUE), .groups = "drop") %>%
+  ggplot(aes(x = Year_num, y = total_HR, color = team)) +
+  geom_line(linewidth = 1) + geom_point(size = 3)
+
+dat.tb %>% filter(team %in% c("Giants", "Tigers", "Carp")) %>%
+  group_by(Year_num, team) %>%
+  summarise(total_HR = sum(HR, na.rm = TRUE), .groups = "drop") %>%
+  ggplot(aes(x = Year_num, y = total_HR, color = team)) +
+  geom_line(linewidth = 1) + geom_point(size = 3)
+
+dat.tb %>% filter(Name == "鈴木誠也") %>%
+  ggplot(aes(x = Year_num, y = HR)) +
+  geom_line() + geom_point() +
+  labs(title = "鈴木誠也選手のHR数推移")
+
+install.packages("GGally")
+library(GGally)
+ggpairs(dat.tb %>% select(height, weight, HR, salary))
+
+dat.tb %>% select(League, height, weight, HR, salary) %>%
+  GGally::ggpairs(mapping = aes(color = League))
+
+install.packages("summarytools")
+library(summarytools)
+summarytools::dfSummary(dat.tb) %>% summarytools::view()
+
+if(!require(plotly)) install.packages("plotly")
+plotly::plot_ly(dat.tb, x = ~height, y = ~weight, z = ~salary,
+                color = ~League, type = "scatter3d", mode = "markers") 
+
